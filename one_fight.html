@@ -7,7 +7,7 @@
         <script src="src/pelea.js"></script>
     </head>
     <body>
-        <section>
+        <section id="seleccionar-personaje">
 
             <h1 class = "titulo">ONE FIGHT 👊⚔️🦵</h1>
             <h2>Elige tu personaje:</h2>
@@ -18,7 +18,34 @@
             <input type="radio" name="personaje" id="zoro"/>
             <label class="tarjeta-personaje" for="sanji">Vinsmoke Sanji</label>
             <input type="radio" name="personaje" id="sanji"/>
+            <label class="tarjeta-personaje" for="law">Trafalgar D. Law</label>
+            <input type="radio" name="personaje" id="law"/>
+            <label class="tarjeta-personaje" for="ace">Portgas D. Ace</label>
+            <input type="radio" name="personaje" id="ace"/>
+
+            <button id="boton-personaje">Seleccionar</button>
+            
         </section>
             
+        <section id="seleccionar-ataque">
+            <h1 class="titulo">ONE FIGHT 👊⚔️🦵</h1>
+            <H2>Elige tu ataque:</H2>
+            <p>Tu personaje <span id="personaje-jugador"></span> tiene <span>3</span> vidas</p>
+            <p>El personaje <span id="personaje-enemigo"></span> del enemigo tiene <span>3</span> vidas</p>
+
+            <p>
+                <button id="boton-golpe">Golpe 👊</button>
+                <button id="boton-corte">Corte ⚔️</button>
+                <button id="boton-patada">Patada 🦵</button>
+                <button id="boton-fuego">Fuego 🔥</button>
+                <button id="boton-especial">Especial 💀</button>
+            </p>
+        </section>
+
+        <section id="mensajes"></section>
+
+        <section id="reinciar">
+            <button id="boton-reiniciar">Reiniciar</button>
+        </section>
     </body>
 </html>
