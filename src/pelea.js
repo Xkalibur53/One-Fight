@@ -1,8 +1,15 @@
 let ataqueJugador
 let ataqueEnemigo
+let vidasJugador  = 3
+let vidasEnemigo = 3
 
 
 function iniciarJuego() {
+    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+    sectionSeleccionarAtaque.style.display = 'none'
+    let sectionReiniciar = document.getElementById('reiniciar')
+    sectionReiniciar.style.display = 'none'
+
     let botonPersonajeJugador = document.getElementById('boton-personaje')
     botonPersonajeJugador.addEventListener('click', seleccionarPersonajeJugador)
 
@@ -12,10 +19,13 @@ function iniciarJuego() {
     botonCorte.addEventListener('click',ataqueCorte)
     let botonPatada = document.getElementById('boton-patada')
     botonPatada.addEventListener('click',ataquePatada)
-    let botonFuego = document.getElementById('boton-fuego')
-    botonFuego.addEventListener('click',ataqueFuego)
     let botonEspecial = document.getElementById('boton-especial')
     botonEspecial.addEventListener('click',ataqueEspecial)
+    let botonFuego = document.getElementById('boton-fuego')
+    botonFuego.addEventListener('click',ataqueFuego)
+
+    let botonReiniciar = document.getElementById('boton-reiniciar')
+    botonReiniciar.addEventListener('click',reiniciarJuego)
 }
 
 function ataqueGolpe() {
@@ -30,14 +40,15 @@ function ataquePatada() {
     ataqueJugador = 'PATADA'
     ataqueAleatorioEnemigo()
 }
-function ataqueFuego() {
-    ataqueJugador = 'FUEGO'
-    ataqueAleatorioEnemigo()
-}
 function ataqueEspecial() {
     ataqueJugador = 'ESPECIAL'
     ataqueAleatorioEnemigo()
 }
+function ataqueFuego() {
+    ataqueJugador = 'FUEGO'
+    ataqueAleatorioEnemigo()
+}
+
 
 function ataqueAleatorioEnemigo() {
     let ataqueAleatorio = aleatorio(1,5)
@@ -49,24 +60,96 @@ function ataqueAleatorioEnemigo() {
     }else if(ataqueAleatorio == 3){
         ataqueEnemigo = 'PATADA'
     }else if(ataqueAleatorio == 4){
-        ataqueEnemigo = 'FUEGO'
-    }else{
         ataqueEnemigo = 'ESPECIAL'
+    }else{
+        ataqueEnemigo = 'FUEGO'
     }
 
-    crearMensaje()
+    combate()
 }
 
-function crearMensaje() {
+function combate() {
+    let spanVidasJugador = document.getElementById('vidas-jugador')
+    let spanVidasEnemigo = document.getElementById('vidas-enemigo')
+
+    if (ataqueJugador == ataqueEnemigo){
+        crearMensaje('EMPATASTE')
+    }else if ((ataqueJugador == 'GOLPE' && ataqueEnemigo == 'CORTE') || (ataqueJugador == 'GOLPE' && ataqueEnemigo == 'ESPECIAL')){
+        crearMensaje('GANASTE')
+        vidasEnemigo--
+        spanVidasEnemigo.innerHTML = vidasEnemigo
+    }else if ((ataqueJugador == 'CORTE' && ataqueEnemigo == 'PATADA') || (ataqueJugador == 'CORTE' && ataqueEnemigo == 'FUEGO')){
+        crearMensaje('GANASTE')
+        vidasEnemigo--
+        spanVidasEnemigo.innerHTML = vidasEnemigo
+    }else if((ataqueJugador == 'PATADA' && ataqueEnemigo == 'ESPECIAL') || (ataqueJugador == 'PATADA' && ataqueEnemigo == 'GOLPE')){
+        crearMensaje('GANASTE')
+        vidasEnemigo--
+        spanVidasEnemigo.innerHTML = vidasEnemigo
+    }else if((ataqueJugador == 'ESPECIAL' && ataqueEnemigo == 'FUEGO') || (ataqueJugador == 'ESPECIAL' && ataqueEnemigo == 'CORTE')){
+        crearMensaje('GANASTE')
+        vidasEnemigo--
+        spanVidasEnemigo.innerHTML = vidasEnemigo
+    }else if ((ataqueJugador == 'FUEGO' && ataqueEnemigo == 'GOLPE') || (ataqueJugador == 'FUEGO' && ataqueEnemigo == 'PATADA')){
+        crearMensaje('GANASTE')
+        vidasEnemigo--
+        spanVidasEnemigo.innerHTML = vidasEnemigo
+    }else{
+        crearMensaje('PERDISTE')
+        vidasJugador--
+        spanVidasJugador.innerHTML = vidasJugador
+    }
+
+    revisarVidas()
+
+}
+
+function revisarVidas() {
+    if(vidasEnemigo == 0){
+        crearMensajeFinal('FELICITACIONES! GANASTE:D')
+    }else if(vidasJugador == 0){
+        crearMensajeFinal('Perdiste :p')
+    }
+}
+
+function crearMensajeFinal(resultadoFinal) {
     let parrafo = document.createElement('p')
     let seccionMensajes = document.getElementById('mensajes')
-    parrafo.innerHTML = 'atacó usando'+ataqueJugador
+    parrafo.innerHTML = resultadoFinal
+    seccionMensajes.appendChild(parrafo)
+
+
+    let botonGolpe = document.getElementById('boton-golpe')
+    botonGolpe.disabled = true
+    let botonCorte = document.getElementById('boton-corte')
+    botonCorte.disabled = true
+    let botonPatada = document.getElementById('boton-patada')
+    botonPatada.disabled = true
+    let botonEspecial = document.getElementById('boton-especial')
+    botonEspecial.disabled = true
+    let botonFuego = document.getElementById('boton-fuego')
+    botonFuego.disabled = true
+
+    let sectionReiniciar = document.getElementById('reiniciar')
+    sectionReiniciar.style.display = 'block'
+}
+
+function crearMensaje(resultado) {
+    let parrafo = document.createElement('p')
+    let seccionMensajes = document.getElementById('mensajes')
+    parrafo.innerHTML = 'Atacó usando ' + ataqueJugador + ' contra su enemigo que usó ' + ataqueEnemigo
+    + ' el resultado fué '+ resultado
     seccionMensajes.appendChild(parrafo)
 }
 
 
 
 function seleccionarPersonajeJugador() {
+    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+    sectionSeleccionarAtaque.style.display = 'block'
+    let sectionSeleccionarPersonaje = document.getElementById('seleccionar-personaje')
+    sectionSeleccionarPersonaje.style.display = 'none'
+
     let spanPersonajeJugador = document.getElementById('personaje-jugador')
     let spanPersonajeEnemigo = document.getElementById('personaje-enemigo')
 
@@ -121,9 +204,11 @@ function seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo)
 
 
 
-window.addEventListener('load',iniciarJuego)
-
+function reiniciarJuego() {
+    location.reload()
+}
 
 function aleatorio(min,max){
-	return Math.floor(Math.random()*(max-min+1)+min)
+    return Math.floor(Math.random()*(max-min+1)+min)
 }
+window.addEventListener('load',iniciarJuego)
