@@ -3,32 +3,56 @@
 <html>
     <meta charset="utf-8"\>
     <head>
-        <title>ONE FIGHT 👊⚔️🦵</title>
+        <title>ONE FIGHT </title>
         <script src="src/pelea.js"></script>
+        <link rel="stylesheet" href="./styles.css">
     </head>
     <body>
         <section id="seleccionar-personaje">
+            <h1 class = "titulo">ONE FIGHT </h1>
 
-            <h1 class = "titulo">ONE FIGHT 👊⚔️🦵</h1>
-            <h2>Elige tu personaje:</h2>
+            <h2 class="subtitulo">Elige tu personaje:</h2>
             
-            <label class="tarjeta-personaje" for="luffy">Monkey D. Luffy</label>
-            <input type="radio" name="personaje" id="luffy"/>
-            <label class="tarjeta-personaje" for="zoro">Roronoa Zoro</label>
-            <input type="radio" name="personaje" id="zoro"/>
-            <label class="tarjeta-personaje" for="sanji">Vinsmoke Sanji</label>
-            <input type="radio" name="personaje" id="sanji"/>
-            <label class="tarjeta-personaje" for="law">Trafalgar D. Law</label>
-            <input type="radio" name="personaje" id="law"/>
-            <label class="tarjeta-personaje" for="ace">Portgas D. Ace</label>
-            <input type="radio" name="personaje" id="ace"/>
+            <div class="tarjetas">
+                <label class="tarjeta-personaje" id="tarjeta-luffy" for="luffy">
+                    <p>Monkey D. Luffy</p>
+                    <img src="./assets/luffy-removebg-preview.png" alt="Luffy">
+                </label>
+                <input type="radio" name="personaje" id="luffy"/>
+
+                <label class="tarjeta-personaje" id="tarjeta-zoro" for="zoro">
+                    <p>Roronoa Zoro</p><br>
+                    <img src="./assets/zoro-removebg-preview.png" alt="Zoro">
+                </label>
+                <input type="radio" name="personaje" id="zoro"/>
+
+                <label class="tarjeta-personaje" id="tarjeta-sanji" for="sanji">
+                    <p>Vinsmoke Sanji</p><br>
+                    <img src="./assets/sanji-removebg-preview.png" alt="Sanji">
+                </label>
+                <input type="radio" name="personaje" id="sanji"/>
+                
+                <label class="tarjeta-personaje" id="tarjeta-law" for="law">
+                    <p>Trafalgar D. Law</p>
+                    <img src="./assets/law-removebg-preview.png" alt="Law">
+                </label>
+                <input type="radio" name="personaje" id="law"/>
+                
+                <label class="tarjeta-personaje" id="tarjeta-ace" for="ace">
+                    <p>Portgas D. Ace</p><br>
+                    <img src="./assets/ace-removebg-preview.png" alt="Ace">
+                </label>
+                <input type="radio" name="personaje" id="ace"/>    
+            </div>
+
 
             <button id="boton-personaje">Seleccionar</button>
             
         </section>
             
         <section id="seleccionar-ataque">
-            <h1 class="titulo">ONE FIGHT 👊⚔️🦵</h1>
+            <h1 class="titulo">ONE FIGHT </h1>
+            
             <H2>Elige tu ataque:</H2>
             <p>Tu personaje <span id="personaje-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
             <p>El personaje <span id="personaje-enemigo"></span> del enemigo tiene <span id="vidas-enemigo">3</span> vidas</p>

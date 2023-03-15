@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=New+Rocker&family=Roboto+Slab&display=swap'); 
+
+body{
+    font-family: 'New Rocker', cursive;
+    
+    background-color: #041562;
+}
+
+
+
+
+
+#seleccionar-personaje{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.titulo{
+    display:flex;
+    justify-content: center;
+    color:aqua;
+    width: 250px;
+    height: 50px;
+    font-size: 40px;
+    
+    transition: background 2s;
+    background: linear-gradient(aqua, rgba(255, 255, 255, 0.774));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color:transparent
+}
+.titulo:hover{
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(rgb(26, 255, 0), rgb(185, 255, 155));
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.subtitulo{
+    color:aliceblue;
+    font-size: 23px;
+    font-family: 'Roboto Slab', serif;
+}
+.tarjetas{
+    display: flex;
+    gap: 10px;
+}
+
+.tarjeta-personaje{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 110px;
+    height: 330px;
+    background: #11468F;
+    box-sizing: border-box;
+    margin:10px;
+    border:2px solid black;
+    border-radius: 20px;
+    padding: 0px;
+    text-align: center;
+;
+}
+
+#tarjeta-luffy{background-color: rgb(229, 1, 2);}
+#tarjeta-zoro{background-color:rgb(45, 218, 4);}
+#tarjeta-sanji{background-color:rgb(1, 125, 179);}
+#tarjeta-law{background-color:rgb(229, 214, 1);}
+#tarjeta-ace{background-color:rgb(231, 106, 0);}
+
+.tarjeta-personaje img{
+    width: 107px;
+    height: 254px;
+    border-radius: 20px;
+}
+
+#tarjeta-zoro p:hover{
+    transition: color 2s;
+    -webkit-text-stroke: 0.3px green;
+    background: linear-gradient(rgb(143, 245, 120), rgba(37, 161, 10, 0.63));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color:transparent
+}
+#tarjeta-luffy p:hover{
+    transition: color 2s;
+    -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.264);
+    background: linear-gradient(rgb(255, 187, 0),rgb(252, 118, 40));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color:transparent
+}
+#tarjeta-sanji p:hover{
+    transition: color 2s;
+    -webkit-text-stroke: 0.3px rgba(52, 85, 99, 0.774);
+    background: linear-gradient(rgb(16, 201, 242),rgb(23, 116, 237));
+    -webkit-background-clip: text;
+    background-clip: text; 
+    color:transparent
+}
+#tarjeta-law p:hover{
+    transition: color 2s;
+    -webkit-text-stroke: 0.3px rgb(99, 96, 55);
+    background: linear-gradient(rgb(255, 249, 162),rgba(229, 214, 1, 0.493));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color:transparent
+}
+#tarjeta-ace p:hover{
+    transition: color 2s;
+    -webkit-text-stroke: 0.3px rgb(100, 77, 58);
+    background: linear-gradient(rgb(230, 173, 122),rgba(231, 108, 0, 0.435));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color:transparent
+}
+
+
+#boton-personaje{
+    width: 180px;
+    height: 40px;
+    border-radius: 20px;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    margin-top: 30px;
+    font-family: 'Roboto Slab', serif;
+}
+
+input{
+    display: none;
+}
