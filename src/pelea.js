@@ -146,7 +146,7 @@ function crearMensaje(resultado) {
 
 function seleccionarPersonajeJugador() {
     let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
-    sectionSeleccionarAtaque.style.display = 'block'
+    sectionSeleccionarAtaque.style.display = 'flex'
     let sectionSeleccionarPersonaje = document.getElementById('seleccionar-personaje')
     sectionSeleccionarPersonaje.style.display = 'none'
 

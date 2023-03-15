@@ -53,23 +53,27 @@
         <section id="seleccionar-ataque">
             <h1 class="titulo">ONE FIGHT </h1>
             
-            <H2>Elige tu ataque:</H2>
-            <p>Tu personaje <span id="personaje-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
-            <p>El personaje <span id="personaje-enemigo"></span> del enemigo tiene <span id="vidas-enemigo">3</span> vidas</p>
+            <h2 class="subtitulo">Elige tu ataque:</h2>
 
-            <p>
-                <button id="boton-golpe">Golpe 👊</button>
-                <button id="boton-corte">Corte ⚔️</button>
-                <button id="boton-patada">Patada 🦵</button>
-                <button id="boton-especial">Especial 💀</button>
-                <button id="boton-fuego">Fuego 🔥</button>
-            </p>
-        </section>
+            <div>
+                <button id="boton-golpe" class="boton-de-ataque">Golpe 👊</button>
+                <button id="boton-corte" class="boton-de-ataque">Corte ⚔️</button>
+                <button id="boton-patada" class="boton-de-ataque"> Patada 🦵</button>
+                <button id="boton-especial" class="boton-de-ataque">Especial 💀</button>
+                <button id="boton-fuego" class="boton-de-ataque">Fuego 🔥</button>
+            </div>
 
-        <section id="mensajes"></section>
+            <div>    
+            <section id="mensajes"></section>
+            <section id="reiniciar">
+                <button id="boton-reiniciar">Reiniciar</button>
+            </section>
+            </div>
 
-        <section id="reiniciar">
-            <button id="boton-reiniciar">Reiniciar</button>
+            <div>
+                <p>Tu personaje <span id="personaje-jugador"></span> tiene <span id="vidas-jugador">3</span> vidas</p>
+                <p>El personaje <span id="personaje-enemigo"></span> del enemigo tiene <span id="vidas-enemigo">3</span> vidas</p>
+            </div>
         </section>
     </body>
 </html>

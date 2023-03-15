@@ -1,14 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=New+Rocker&family=Roboto+Slab&display=swap'); 
 
 body{
-    font-family: 'New Rocker', cursive;
-    
+    font-family: 'Roboto Slab', serif;
     background-color: #041562;
 }
-
-
-
-
 
 #seleccionar-personaje{
     display: flex;
@@ -19,6 +14,7 @@ body{
 
 
 .titulo{
+    font-family: 'New Rocker', cursive;
     display:flex;
     justify-content: center;
     color:aqua;
@@ -26,7 +22,6 @@ body{
     height: 50px;
     font-size: 40px;
     
-    transition: background 2s;
     background: linear-gradient(aqua, rgba(255, 255, 255, 0.774));
     -webkit-background-clip: text;
     background-clip: text;
@@ -50,6 +45,7 @@ body{
 }
 
 .tarjeta-personaje{
+    font-family: 'New Rocker', cursive;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -64,7 +60,6 @@ body{
     border-radius: 20px;
     padding: 0px;
     text-align: center;
-;
 }
 
 #tarjeta-luffy{background-color: rgb(229, 1, 2);}
@@ -80,7 +75,7 @@ body{
 }
 
 #tarjeta-zoro p:hover{
-    transition: color 2s;
+    transition: color 1s;
     -webkit-text-stroke: 0.3px green;
     background: linear-gradient(rgb(143, 245, 120), rgba(37, 161, 10, 0.63));
     -webkit-background-clip: text;
@@ -88,7 +83,7 @@ body{
     color:transparent
 }
 #tarjeta-luffy p:hover{
-    transition: color 2s;
+    transition: color 1s;
     -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.264);
     background: linear-gradient(rgb(255, 187, 0),rgb(252, 118, 40));
     -webkit-background-clip: text;
@@ -96,7 +91,7 @@ body{
     color:transparent
 }
 #tarjeta-sanji p:hover{
-    transition: color 2s;
+    transition: color 1s;
     -webkit-text-stroke: 0.3px rgba(52, 85, 99, 0.774);
     background: linear-gradient(rgb(16, 201, 242),rgb(23, 116, 237));
     -webkit-background-clip: text;
@@ -104,7 +99,7 @@ body{
     color:transparent
 }
 #tarjeta-law p:hover{
-    transition: color 2s;
+    transition: color 1s;
     -webkit-text-stroke: 0.3px rgb(99, 96, 55);
     background: linear-gradient(rgb(255, 249, 162),rgba(229, 214, 1, 0.493));
     -webkit-background-clip: text;
@@ -112,7 +107,7 @@ body{
     color:transparent
 }
 #tarjeta-ace p:hover{
-    transition: color 2s;
+    transition: color 1s;
     -webkit-text-stroke: 0.3px rgb(100, 77, 58);
     background: linear-gradient(rgb(230, 173, 122),rgba(231, 108, 0, 0.435));
     -webkit-background-clip: text;
@@ -134,4 +129,20 @@ body{
 
 input{
     display: none;
+}
+
+#seleccionar-ataque{
+    flex-direction: column;
+    align-items: center;
+}
+
+.boton-de-ataque{
+    background-color:green;
+    box-sizing: border-box;
+    border-radius: 20px;
+    padding: 10px;
+    color:white;
+    border-color: transparent;
+    font-family: 'Roboto Slab', serif;
+    width: 120px;
 }
