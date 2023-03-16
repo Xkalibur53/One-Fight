@@ -108,15 +108,29 @@ function revisarVidas() {
     if(vidasEnemigo == 0){
         crearMensajeFinal('FELICITACIONES! GANASTE:D')
     }else if(vidasJugador == 0){
-        crearMensajeFinal('Perdiste :p')
+        crearMensajeFinal('Esta vez perdiste. Sigue intentando!')
     }
 }
 
+function crearMensaje(resultado) {
+    let sectionMensajes = document.getElementById('resultado')
+    let ataquesDelJugador = document.getElementById('ataques-del-jugador')
+    let ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
+
+    let nuevoAtaqueDelJugador = document.createElement('p')
+    let nuevoAtaqueDelEnemigo = document.createElement('p')
+
+    sectionMensajes.innerHTML = resultado
+    nuevoAtaqueDelJugador.innerHTML = ataqueJugador
+    nuevoAtaqueDelEnemigo.innerHTML = ataqueEnemigo
+
+    ataquesDelJugador.appendChild(nuevoAtaqueDelJugador)
+    ataquesDelEnemigo.appendChild(nuevoAtaqueDelEnemigo)
+}
+
 function crearMensajeFinal(resultadoFinal) {
-    let parrafo = document.createElement('p')
-    let seccionMensajes = document.getElementById('mensajes')
-    parrafo.innerHTML = resultadoFinal
-    seccionMensajes.appendChild(parrafo)
+    let sectionMensajes = document.getElementById('resultado')
+    sectionMensajes.innerHTML = resultadoFinal
 
 
     let botonGolpe = document.getElementById('boton-golpe')
@@ -133,16 +147,6 @@ function crearMensajeFinal(resultadoFinal) {
     let sectionReiniciar = document.getElementById('reiniciar')
     sectionReiniciar.style.display = 'block'
 }
-
-function crearMensaje(resultado) {
-    let parrafo = document.createElement('p')
-    let seccionMensajes = document.getElementById('mensajes')
-    parrafo.innerHTML = 'Atacó usando ' + ataqueJugador + ' contra su enemigo que usó ' + ataqueEnemigo
-    + ' el resultado fué '+ resultado
-    seccionMensajes.appendChild(parrafo)
-}
-
-
 
 function seleccionarPersonajeJugador() {
     let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
