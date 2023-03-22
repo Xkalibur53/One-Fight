@@ -4,7 +4,6 @@
     <meta charset="utf-8"\>
     <head>
         <title>ONE FIGHT </title>
-        <script src="src/pelea.js"></script>
         <link rel="stylesheet" href="./styles.css">
     </head>
     <body>
@@ -13,37 +12,7 @@
 
             <h2 class="subtitulo">Elige tu personaje:</h2>
             
-            <div class="tarjetas">
-                <input type="radio" name="personaje" id="luffy"/>
-                <label class="tarjeta-personaje" id="tarjeta-luffy" for="luffy">
-                    <p>Monkey D. Luffy</p>
-                    <img src="./assets/luffy-removebg-preview.png" alt="Luffy">
-                </label>
-
-                <input type="radio" name="personaje" id="zoro"/>
-                <label class="tarjeta-personaje" id="tarjeta-zoro" for="zoro">
-                    <p>Roronoa Zoro</p><br>
-                    <img src="./assets/zoro-removebg-preview.png" alt="Zoro">
-                </label>
-
-                <input type="radio" name="personaje" id="sanji"/>
-                <label class="tarjeta-personaje" id="tarjeta-sanji" for="sanji">
-                    <p>Vinsmoke Sanji</p><br>
-                    <img src="./assets/sanji-removebg-preview.png" alt="Sanji">
-                </label>
-                
-                <input type="radio" name="personaje" id="law"/>
-                <label class="tarjeta-personaje" id="tarjeta-law" for="law">
-                    <p>Trafalgar D. Law</p>
-                    <img src="./assets/law-removebg-preview.png" alt="Law">
-                </label>
-                
-                <input type="radio" name="personaje" id="ace"/>    
-                <label class="tarjeta-personaje" id="tarjeta-ace" for="ace">
-                    <p>Portgas D. Ace</p><br>
-                    <img src="./assets/ace-removebg-preview.png" alt="Ace">
-                </label>
-            </div>
+            <div id="contenedor-tarjetas" class="tarjetas"></div>
 
 
             <button id="boton-personaje">Seleccionar</button>
@@ -55,13 +24,7 @@
             
             <h2 class="subtitulo">Elige tu ataque:</h2>
 
-            <div class="tarjetas-ataques">
-                <button id="boton-golpe" class="boton-de-ataque">Golpe 👊</button>
-                <button id="boton-corte" class="boton-de-ataque">Corte ⚔️</button>
-                <button id="boton-patada" class="boton-de-ataque"> Patada 🦵</button>
-                <button id="boton-especial" class="boton-de-ataque">Especial 💀</button>
-                <button id="boton-fuego" class="boton-de-ataque">Fuego 🔥</button>
-            </div>
+            <div id="contenedor-ataques" class="tarjetas-ataques"></div>
 
             <div id="mensajes">
                 <p id="resultado">Mucha suerte!</p>
@@ -73,18 +36,18 @@
             
             <div class="ataques">
                 <div class="ataques-jugador">
-                    <span id="vidas-jugador">3</span>
+                    <span id="victorias-jugador">0</span>
                     <span id="personaje-jugador"></span>
                     <div id="ataques-del-jugador"></div>
                 </div>
 
                 <div class="ataques-enemigo">
-                    <span id="vidas-enemigo">3</span>
+                    <span id="victorias-enemigo">0</span>
                     <span id="personaje-enemigo"></span>
                     <div id="ataques-del-enemigo"></div>
                 </div>
-
             </div>
         </section>
+        <script src="src/pelea.js"></script>
     </body>
 </html>

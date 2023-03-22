@@ -1,208 +1,339 @@
-let ataqueJugador
-let ataqueEnemigo
-let vidasJugador  = 3
-let vidasEnemigo = 3
+const sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+const sectionReiniciar = document.getElementById('reiniciar')
+const botonPersonajeJugador = document.getElementById('boton-personaje')
+const botonReiniciar = document.getElementById('boton-reiniciar')
+
+const spanVictoriasJugador = document.getElementById('victorias-jugador')
+const spanVictoriasEnemigo = document.getElementById('victorias-enemigo')
+
+const sectionMensajes = document.getElementById('resultado')
+const ataquesDelJugador = document.getElementById('ataques-del-jugador')
+const ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
+
+const sectionSeleccionarPersonaje = document.getElementById('seleccionar-personaje')
+const spanPersonajeJugador = document.getElementById('personaje-jugador')
+const spanPersonajeEnemigo = document.getElementById('personaje-enemigo')
+
+
+const contenedorTarjetas = document.getElementById('contenedor-tarjetas')
+const contenedorAtaques = document.getElementById('contenedor-ataques')
+
+let ataqueJugador = []
+let ataqueEnemigo = []
+let victoriasJugador = 0
+let victoriasEnemigo = 0
+let personajes = []
+let opcionDePersonajes
+let personajeJugador
+let ataquesPersonaje
+let ataquesPersonajeEnemigo
+let botones = []
+let indexAtaqueJugador
+let indexAtaqueEnemigo
+
+let botonGolpe
+let botonCorte
+let botonPatada
+let botonEspecial
+let botonFuego
+
+
+let inputLuffy
+let inputZoro
+let inputSanji
+let inputLaw
+let inputAce
+
+
+class Personaje{
+    constructor(nombreCompleto,nombre, foto, vida){
+        this.nombreCompleto = nombreCompleto
+        this.nombre = nombre
+        this.foto = foto
+        this.vida = vida
+        this.ataques = []
+    }
+}
+
+let luffy = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5)
+let zoro = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5)
+let sanji = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5)
+let law = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5)
+let ace = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5)
+
+luffy.ataques.push(
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'💀', id:'boton-especial'}
+)
+zoro.ataques.push(
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'💀', id:'boton-especial'}
+)
+sanji.ataques.push(
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'💀', id:'boton-especial'}
+)
+law.ataques.push(
+    {nombre:'💀', id:'boton-especial'},
+    {nombre:'💀', id:'boton-especial'},
+    {nombre:'💀', id:'boton-especial'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'🔥', id:'boton-fuego'}
+)
+ace.ataques.push(
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'🔥', id:'boton-fuego'},
+    {nombre:'👊', id:'boton-golpe'},
+    {nombre:'🦵', id:'boton-patada'},
+    {nombre:'⚔️', id:'boton-corte'},
+    {nombre:'💀', id:'boton-especial'},
+    {nombre:'💀', id:'boton-especial'}
+)
+
+
+personajes.push(luffy,zoro,sanji,law,ace)
 
 
 function iniciarJuego() {
-    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
+    personajes.forEach((personaje)=>{
+        opcionDePersonajes = `
+        <input type="radio" name="personaje" id=${personaje.nombre} />
+        <label class="tarjeta-personaje" id="tarjeta-${personaje.nombre}" for=${personaje.nombre}>
+            <p>${personaje.nombreCompleto}</p>
+            <img src=${personaje.foto} alt="${personaje.nombreCompleto}">
+        </label>
+        `
+        contenedorTarjetas.innerHTML += opcionDePersonajes
+    })
+    inputLuffy = document.getElementById('luffy')
+    inputZoro = document.getElementById('zoro')
+    inputSanji = document.getElementById('sanji')
+    inputLaw = document.getElementById('law')
+    inputAce = document.getElementById('ace')
+
     sectionSeleccionarAtaque.style.display = 'none'
-    let sectionReiniciar = document.getElementById('reiniciar')
     sectionReiniciar.style.display = 'none'
-
-    let botonPersonajeJugador = document.getElementById('boton-personaje')
     botonPersonajeJugador.addEventListener('click', seleccionarPersonajeJugador)
-
-    let botonGolpe = document.getElementById('boton-golpe')
-    botonGolpe.addEventListener('click',ataqueGolpe)
-    let botonCorte = document.getElementById('boton-corte')
-    botonCorte.addEventListener('click',ataqueCorte)
-    let botonPatada = document.getElementById('boton-patada')
-    botonPatada.addEventListener('click',ataquePatada)
-    let botonEspecial = document.getElementById('boton-especial')
-    botonEspecial.addEventListener('click',ataqueEspecial)
-    let botonFuego = document.getElementById('boton-fuego')
-    botonFuego.addEventListener('click',ataqueFuego)
-
-    let botonReiniciar = document.getElementById('boton-reiniciar')
     botonReiniciar.addEventListener('click',reiniciarJuego)
 }
 
-function ataqueGolpe() {
-    ataqueJugador = 'GOLPE'
-    ataqueAleatorioEnemigo()
-}
-function ataqueCorte() {
-    ataqueJugador = 'CORTE'
-    ataqueAleatorioEnemigo()
-}
-function ataquePatada() {
-    ataqueJugador = 'PATADA'
-    ataqueAleatorioEnemigo()
-}
-function ataqueEspecial() {
-    ataqueJugador = 'ESPECIAL'
-    ataqueAleatorioEnemigo()
-}
-function ataqueFuego() {
-    ataqueJugador = 'FUEGO'
-    ataqueAleatorioEnemigo()
-}
 
 
 function ataqueAleatorioEnemigo() {
-    let ataqueAleatorio = aleatorio(1,5)
+    let ataqueAleatorioEnemigo = aleatorio(0,ataquesPersonajeEnemigo.length - 1)
     
-    if(ataqueAleatorio == 1){
-        ataqueEnemigo = 'GOLPE'
-    }else if(ataqueAleatorio == 2){
-        ataqueEnemigo = 'CORTE'
-    }else if(ataqueAleatorio == 3){
-        ataqueEnemigo = 'PATADA'
-    }else if(ataqueAleatorio == 4){
-        ataqueEnemigo = 'ESPECIAL'
+    if(ataqueAleatorioEnemigo == 0 || ataqueAleatorioEnemigo == 1){
+        ataqueEnemigo.push('GOLPE')
+    }else if(ataqueAleatorioEnemigo == 2 || ataqueAleatorioEnemigo == 3){
+        ataqueEnemigo.push('CORTE')
+    }else if(ataqueAleatorioEnemigo == 4 || ataqueAleatorioEnemigo == 5){
+        ataqueEnemigo.push('PATADA')
+    }else if(ataqueAleatorioEnemigo == 6 || ataqueAleatorioEnemigo == 7){
+        ataqueEnemigo.push('ESPECIAL')
     }else{
-        ataqueEnemigo = 'FUEGO'
+        ataqueEnemigo.push('FUEGO')
     }
+    iniciarCombate()
+}
 
-    combate()
+function iniciarCombate() {
+    if(ataqueJugador.length === 8 ){
+        combate()
+    }
+}
+
+function indexAmbosOponentes(jugador,enemigo) {
+    indexAtaqueJugador = ataqueJugador[jugador]
+    indexAtaqueEnemigo = ataqueEnemigo[enemigo]
 }
 
 function combate() {
-    let spanVidasJugador = document.getElementById('vidas-jugador')
-    let spanVidasEnemigo = document.getElementById('vidas-enemigo')
-
-    if (ataqueJugador == ataqueEnemigo){
-        crearMensaje('EMPATASTE')
-    }else if ((ataqueJugador == 'GOLPE' && ataqueEnemigo == 'CORTE') || (ataqueJugador == 'GOLPE' && ataqueEnemigo == 'ESPECIAL')){
-        crearMensaje('GANASTE')
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    }else if ((ataqueJugador == 'CORTE' && ataqueEnemigo == 'PATADA') || (ataqueJugador == 'CORTE' && ataqueEnemigo == 'FUEGO')){
-        crearMensaje('GANASTE')
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    }else if((ataqueJugador == 'PATADA' && ataqueEnemigo == 'ESPECIAL') || (ataqueJugador == 'PATADA' && ataqueEnemigo == 'GOLPE')){
-        crearMensaje('GANASTE')
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    }else if((ataqueJugador == 'ESPECIAL' && ataqueEnemigo == 'FUEGO') || (ataqueJugador == 'ESPECIAL' && ataqueEnemigo == 'CORTE')){
-        crearMensaje('GANASTE')
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    }else if ((ataqueJugador == 'FUEGO' && ataqueEnemigo == 'GOLPE') || (ataqueJugador == 'FUEGO' && ataqueEnemigo == 'PATADA')){
-        crearMensaje('GANASTE')
-        vidasEnemigo--
-        spanVidasEnemigo.innerHTML = vidasEnemigo
-    }else{
-        crearMensaje('PERDISTE')
-        vidasJugador--
-        spanVidasJugador.innerHTML = vidasJugador
+    for (let index = 0; index < ataqueJugador.length; index++) {
+        if(ataqueJugador[index] === ataqueEnemigo[index]){
+            indexAmbosOponentes(index, index)
+            crearMensaje('EMPATASTE')
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else if ((ataqueJugador[index] === 'GOLPE' && ataqueEnemigo[index] === 'CORTE') || (ataqueJugador[index] === 'GOLPE' && ataqueEnemigo[index] === 'ESPECIAL')){
+            indexAmbosOponentes(index, index)
+            crearMensaje('GANASTE')
+            victoriasJugador++
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else if ((ataqueJugador[index] === 'CORTE' && ataqueEnemigo[index] === 'PATADA') || (ataqueJugador[index] === 'CORTE' && ataqueEnemigo[index] === 'FUEGO')){
+            indexAmbosOponentes(index, index)
+            crearMensaje('GANASTE')
+            victoriasJugador++
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else if((ataqueJugador[index] === 'PATADA' && ataqueEnemigo[index] === 'ESPECIAL') || (ataqueJugador[index] === 'PATADA' && ataqueEnemigo[index] === 'GOLPE')){
+            indexAmbosOponentes(index, index)
+            crearMensaje('GANASTE')
+            victoriasJugador++
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else if((ataqueJugador[index] === 'ESPECIAL' && ataqueEnemigo[index] === 'FUEGO') || (ataqueJugador[index] === 'ESPECIAL' && ataqueEnemigo[index] === 'CORTE')){
+            indexAmbosOponentes(index, index)
+            crearMensaje('GANASTE')
+            victoriasJugador++
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else if ((ataqueJugador[index] === 'FUEGO' && ataqueEnemigo[index] === 'GOLPE') || (ataqueJugador[index] === 'FUEGO' && ataqueEnemigo[index] === 'PATADA')){
+            indexAmbosOponentes(index, index)
+            crearMensaje('GANASTE')
+            victoriasJugador++
+            spanVictoriasJugador.innerHTML = victoriasJugador
+        }else{
+            indexAmbosOponentes(index, index)
+            crearMensaje('PERDISTE')
+            victoriasEnemigo++
+            spanVictoriasEnemigo.innerHTML = victoriasEnemigo
+        }
+        
     }
 
-    revisarVidas()
+    revisarVictorias()
 
 }
 
-function revisarVidas() {
-    if(vidasEnemigo == 0){
+function revisarVictorias() {
+    if(victoriasJugador === victoriasEnemigo){
+        crearMensajeFinal('Esta vez fue un empate')
+    }else if(victoriasJugador > victoriasEnemigo){
         crearMensajeFinal('FELICITACIONES! GANASTE:D')
-    }else if(vidasJugador == 0){
+    }else{
         crearMensajeFinal('Esta vez perdiste. Sigue intentando!')
     }
 }
 
 function crearMensaje(resultado) {
-    let sectionMensajes = document.getElementById('resultado')
-    let ataquesDelJugador = document.getElementById('ataques-del-jugador')
-    let ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
-
     let nuevoAtaqueDelJugador = document.createElement('p')
     let nuevoAtaqueDelEnemigo = document.createElement('p')
 
     sectionMensajes.innerHTML = resultado
-    nuevoAtaqueDelJugador.innerHTML = ataqueJugador
-    nuevoAtaqueDelEnemigo.innerHTML = ataqueEnemigo
+    nuevoAtaqueDelJugador.innerHTML = indexAtaqueJugador
+    nuevoAtaqueDelEnemigo.innerHTML = indexAtaqueEnemigo
 
     ataquesDelJugador.appendChild(nuevoAtaqueDelJugador)
     ataquesDelEnemigo.appendChild(nuevoAtaqueDelEnemigo)
 }
 
 function crearMensajeFinal(resultadoFinal) {
-    let sectionMensajes = document.getElementById('resultado')
     sectionMensajes.innerHTML = resultadoFinal
-
-
-    let botonGolpe = document.getElementById('boton-golpe')
-    botonGolpe.disabled = true
-    let botonCorte = document.getElementById('boton-corte')
-    botonCorte.disabled = true
-    let botonPatada = document.getElementById('boton-patada')
-    botonPatada.disabled = true
-    let botonEspecial = document.getElementById('boton-especial')
-    botonEspecial.disabled = true
-    let botonFuego = document.getElementById('boton-fuego')
-    botonFuego.disabled = true
-
-    let sectionReiniciar = document.getElementById('reiniciar')
     sectionReiniciar.style.display = 'block'
 }
 
 function seleccionarPersonajeJugador() {
-    let sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
     sectionSeleccionarAtaque.style.display = 'flex'
-    let sectionSeleccionarPersonaje = document.getElementById('seleccionar-personaje')
     sectionSeleccionarPersonaje.style.display = 'none'
-
-    let spanPersonajeJugador = document.getElementById('personaje-jugador')
-    let spanPersonajeEnemigo = document.getElementById('personaje-enemigo')
-
-    let inputLuffy = document.getElementById('luffy')
-    let inputZoro = document.getElementById('zoro')
-    let inputSanji = document.getElementById('sanji')
-    let inputLaw = document.getElementById('law')
-    let inputAce = document.getElementById('ace')
-
     
     if (inputLuffy.checked){
-        spanPersonajeJugador.innerHTML = 'Monkey D. Luffy'
+        spanPersonajeJugador.innerHTML = luffy.nombreCompleto
+        personajeJugador = luffy.nombreCompleto
     }else if (inputZoro.checked){
-        spanPersonajeJugador.innerHTML = 'Roronoa Zoro'
+        spanPersonajeJugador.innerHTML = zoro.nombreCompleto
+        personajeJugador = zoro.nombreCompleto
     }else if (inputSanji.checked){
-        spanPersonajeJugador.innerHTML = 'Vinsmoke Sanji'
+        spanPersonajeJugador.innerHTML = sanji.nombreCompleto
+        personajeJugador = sanji.nombreCompleto
     }else if(inputLaw.checked){
-        spanPersonajeJugador.innerHTML = 'Trafalgar D. Law'
+        spanPersonajeJugador.innerHTML = law.nombreCompleto
+        personajeJugador = law.nombreCompleto
     }else if(inputAce.checked){
-        spanPersonajeJugador.innerHTML = 'Portgas D. Ace'
+        spanPersonajeJugador.innerHTML = ace.nombreCompleto
+        personajeJugador = ace.nombreCompleto
     }else{
         alert('Selecciona un personaje')
         return
     }
 
+    extraerAtaques(personajeJugador)
     seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo)
 }
 
+function extraerAtaques(personajeJugador) {
+    let ataques
+    for (let i = 0; i < personajes.length; i++) {
+        if (personajeJugador === personajes[i].nombreCompleto) {
+            ataques = personajes[i].ataques;
+        }
+    }
+    mostrarAtaques(ataques)
+}
 
+function mostrarAtaques(ataques) {
+    ataques.forEach((ataque)=>{
+        ataquesPersonaje = `
+        <button id=${ataque.id} class="boton-de-ataque">${ataque.nombre}</button>
+        `
+        contenedorAtaques.innerHTML += ataquesPersonaje
+    })
+    botonGolpe = document.getElementById('boton-golpe')
+    botonCorte = document.getElementById('boton-corte')
+    botonPatada = document.getElementById('boton-patada')
+    botonEspecial = document.getElementById('boton-especial')
+    botonFuego = document.getElementById('boton-fuego')
+    botones = document.querySelectorAll('.boton-de-ataque')
+
+}
+
+function secuenciaAtaque() {
+    botones.forEach((boton)=>{
+        boton.addEventListener('click',(e)=>{
+            if (e.target.textContent === '👊') {
+                ataqueJugador.push('GOLPE')
+                boton.style.background = '#3f969b60'
+                boton.disabled = true
+            }else if(e.target.textContent === '⚔️'){
+                ataqueJugador.push('CORTE')
+                boton.style.background = '#3f969b60'
+                boton.disabled = true
+            }else if(e.target.textContent === '🦵'){
+                ataqueJugador.push('PATADA')
+                boton.style.background = '#3f969b60'
+                boton.disabled = true
+            }else if(e.target.textContent === '💀'){
+                ataqueJugador.push('ESPECIAL')
+                boton.style.background = '#3f969b60'
+                boton.disabled = true
+            }else if(e.target.textContent === '🔥'){
+                ataqueJugador.push('FUEGO')
+                boton.style.background = '#3f969b60'
+                boton.disabled = true
+            }
+            ataqueAleatorioEnemigo()
+        })
+    })
+    
+}
 
 
 function seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo) {
     let personajeAleatorio
     // 1:Luffy, 2:Zoro, 3:Sanji, 4:Law, 5:Ace
     do {
-        personajeAleatorio = aleatorio(1,5)
-        if(personajeAleatorio == 1){
-            spanPersonajeEnemigo.innerHTML = 'Monkey D. Luffy'
-        }else if(personajeAleatorio == 2){
-            spanPersonajeEnemigo.innerHTML = 'Roronoa Zoro'
-        }else if(personajeAleatorio == 3){
-            spanPersonajeEnemigo.innerHTML = 'Vinsmoke Sanji'
-        }else if(personajeAleatorio == 4){
-            spanPersonajeEnemigo.innerHTML = 'Trafalgar D. Law'
-        }else{
-            spanPersonajeEnemigo.innerHTML = 'Portgas D. Ace'
-        }
+        personajeAleatorio = aleatorio(0,personajes.length - 1)
+        spanPersonajeEnemigo.innerHTML = personajes[personajeAleatorio].nombreCompleto
     } while (spanPersonajeEnemigo.innerHTML == spanPersonajeJugador.innerHTML);
-
+    ataquesPersonajeEnemigo = personajes[personajeAleatorio].ataques
+    secuenciaAtaque()
 }
 
 
