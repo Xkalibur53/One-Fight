@@ -18,6 +18,11 @@ const spanPersonajeEnemigo = document.getElementById('personaje-enemigo')
 const contenedorTarjetas = document.getElementById('contenedor-tarjetas')
 const contenedorAtaques = document.getElementById('contenedor-ataques')
 
+
+const sectionVerMapa = document.getElementById('ver-mapa')
+const mapa = document.getElementById('mapa')
+
+
 let ataqueJugador = []
 let ataqueEnemigo = []
 let victoriasJugador = 0
@@ -25,6 +30,7 @@ let victoriasEnemigo = 0
 let personajes = []
 let opcionDePersonajes
 let personajeJugador
+let personajeJugadorObjeto
 let ataquesPersonaje
 let ataquesPersonajeEnemigo
 let botones = []
@@ -44,22 +50,52 @@ let inputSanji
 let inputLaw
 let inputAce
 
+let lienzo = mapa.getContext('2d')
+let intervalo
+let mapaBackground = new Image()
+mapaBackground.src = '../assets/background.jpg'
+
 
 class Personaje{
-    constructor(nombreCompleto,nombre, foto, vida){
+    constructor(nombreCompleto,nombre, foto, vida, fotoMapa, ancho = 70, alto = 100){
         this.nombreCompleto = nombreCompleto
         this.nombre = nombre
         this.foto = foto
         this.vida = vida
         this.ataques = []
+        this.x = aleatorio(100,380)
+        this.y = aleatorio(100,260)
+        this.ancho = ancho
+        this.alto = alto
+        this.mapaFoto = new Image()
+        this.mapaFoto.src = fotoMapa
+        this.velocidadX = 0
+        this.velocidadY = 0
+    }
+    pintarPersonaje(){
+        lienzo.drawImage(
+            this.mapaFoto,
+            this.x,
+            this.y,
+            this.ancho,
+            this.alto
+        )
     }
 }
 
-let luffy = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5)
-let zoro = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5)
-let sanji = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5)
-let law = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5)
-let ace = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5)
+let luffy = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'../assets/luffy-map.png')
+let zoro = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'../assets/zoro-map.png',90,110)
+let sanji = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'../assets/sanji-map.png',100)
+let law = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'../assets/law-map.png',80)
+let ace = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'../assets/ace-map.png')
+
+let luffyEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'../assets/luffy-map.png')
+let zoroEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'../assets/zoro-map.png',90,110)
+let sanjiEnemigo = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'../assets/sanji-map.png',100)
+let lawEnemigo = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'../assets/law-map.png',80)
+let aceEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'../assets/ace-map.png')
+
+
 
 luffy.ataques.push(
     {nombre:'👊', id:'boton-golpe'},
@@ -133,6 +169,7 @@ function iniciarJuego() {
     inputLaw = document.getElementById('law')
     inputAce = document.getElementById('ace')
 
+    sectionVerMapa.style.display = 'none'
     sectionSeleccionarAtaque.style.display = 'none'
     sectionReiniciar.style.display = 'none'
     botonPersonajeJugador.addEventListener('click', seleccionarPersonajeJugador)
@@ -241,9 +278,9 @@ function crearMensajeFinal(resultadoFinal) {
 }
 
 function seleccionarPersonajeJugador() {
-    sectionSeleccionarAtaque.style.display = 'flex'
+    // sectionSeleccionarAtaque.style.display = 'flex'
     sectionSeleccionarPersonaje.style.display = 'none'
-    
+
     if (inputLuffy.checked){
         spanPersonajeJugador.innerHTML = luffy.nombreCompleto
         personajeJugador = luffy.nombreCompleto
@@ -264,6 +301,8 @@ function seleccionarPersonajeJugador() {
         return
     }
 
+    sectionVerMapa.style.display = 'flex'
+    iniciarMapa()
     extraerAtaques(personajeJugador)
     seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo)
 }
@@ -346,4 +385,78 @@ function reiniciarJuego() {
 function aleatorio(min,max){
     return Math.floor(Math.random()*(max-min+1)+min)
 }
+
+function pintarCanvas() {
+    personajeJugadorObjeto.x = personajeJugadorObjeto.x + personajeJugadorObjeto.velocidadX
+    personajeJugadorObjeto.y = personajeJugadorObjeto.y + personajeJugadorObjeto.velocidadY
+    lienzo.clearRect(0,0,mapa.width,mapa.height)
+    lienzo.drawImage(
+        mapaBackground,
+        0,
+        0,
+        mapa.width,
+        mapa.height
+    )
+    personajeJugadorObjeto.pintarPersonaje()
+    luffyEnemigo.pintarPersonaje()
+    zoroEnemigo.pintarPersonaje()
+    sanjiEnemigo.pintarPersonaje()
+    lawEnemigo.pintarPersonaje()
+    aceEnemigo.pintarPersonaje()
+    
+}
+
+function moverDerecha() {
+    personajeJugadorObjeto.velocidadX = 5
+}
+function moverIzquierda() {
+    personajeJugadorObjeto.velocidadX = -5
+}
+function moverAbajo() {
+    personajeJugadorObjeto.velocidadY = 5
+}
+function moverArriba() {
+    personajeJugadorObjeto.velocidadY = -5
+}
+function detenerMovimiento() {
+    personajeJugadorObjeto.velocidadX = 0
+    personajeJugadorObjeto.velocidadY = 0
+}
+
+function sePresionoUnaTecla(event) {
+    switch (event.key) {
+        case 'ArrowUp':
+            moverArriba()
+            break
+        case 'ArrowDown':
+            moverAbajo()
+            break
+        case 'ArrowLeft':
+            moverIzquierda()
+            break
+        case 'ArrowRight':
+            moverDerecha()
+            break
+        default:
+            break
+    }
+}
+
+function iniciarMapa() {
+    mapa.width = 480
+    mapa.height = 360
+    personajeJugadorObjeto = extraerObjetoPersonaje()
+    intervalo = setInterval(pintarCanvas,50)    
+    window.addEventListener('keydown', sePresionoUnaTecla)
+    window.addEventListener('keyup', detenerMovimiento)
+}
+
+function extraerObjetoPersonaje() {
+    for (let i = 0; i < personajes.length; i++) {
+        if (personajeJugador === personajes[i].nombreCompleto) {
+            return personajes[i]
+        }
+    }
+}
+
 window.addEventListener('load',iniciarJuego)
