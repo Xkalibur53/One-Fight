@@ -242,3 +242,9 @@ input:checked + label{
 #tarjeta-ace{
     justify-content: space-between;
 }
+#tarjeta-law{
+    justify-content: space-between;
+}
+#tarjeta-luffy{
+    justify-content: space-between;
+}

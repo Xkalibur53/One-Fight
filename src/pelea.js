@@ -467,7 +467,7 @@ function enviarPosicion(x,y) {
                         personajesEnemigos = enemigos.map(function (enemigo){
                             let personajeEnemigo = null
                             const personajeNombre = enemigo.personaje.nombre || ""
-                            if (personajeNombre === 'Mokey D. Luffy'){
+                            if (personajeNombre === 'Monkey D. Luffy'){
                                 personajeEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'./assets/luffy-map.png')
                             }else if(personajeNombre === 'Roronoa Zoro'){
                                 personajeEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'./assets/zoro-map.png')
@@ -479,6 +479,7 @@ function enviarPosicion(x,y) {
                                 personajeEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'./assets/ace-map.png')
                             }else{
                                 alert('ayuda')
+                                return
                             }
                             personajeEnemigo.x = enemigo.x
                             personajeEnemigo.y = enemigo.y
