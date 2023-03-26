@@ -191,15 +191,24 @@ input:checked + label{
     align-items: center;
     justify-content: center;
 }
-#ver-mapa h1{
+#ver-mapa h2{
     width: 570px;
 }
 #mapa{
-    border:2px solid white;
+    border:2px solid rgba(172, 255, 47, 0.377);
 }
 
-
-@media (max-width:360px){
+#ver-mapa button{
+    width: 80px;
+    height: 40px;
+    border-radius: 20px;
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    margin: 10px 0;
+    font-family: 'Roboto Slab', serif;
+}
+@media (max-width:560px){
     .tarjetas, .tarjetas-ataques{
         flex-direction: column;
     }
@@ -214,3 +223,22 @@ input:checked + label{
     }
 }
 
+
+@media (max-width:300px){
+    #ver-mapa div{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}
+
+
+#tarjeta-zoro{
+    justify-content: space-between;
+}
+#tarjeta-sanji{
+    justify-content: space-between;
+}
+#tarjeta-ace{
+    justify-content: space-between;
+}

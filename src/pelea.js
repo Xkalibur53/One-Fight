@@ -23,6 +23,8 @@ const sectionVerMapa = document.getElementById('ver-mapa')
 const mapa = document.getElementById('mapa')
 
 
+let jugadorId = null
+let personajesEnemigos = []
 let ataqueJugador = []
 let ataqueEnemigo = []
 let victoriasJugador = 0
@@ -53,20 +55,27 @@ let inputAce
 let lienzo = mapa.getContext('2d')
 let intervalo
 let mapaBackground = new Image()
-mapaBackground.src = '../assets/background.jpg'
-
+mapaBackground.src = './assets/background.jpg'
+let alturaCalcular
+let anchoDelMapa = window.innerWidth - 20
+const anchoMaximoMapa = 480
+if(anchoDelMapa>anchoMaximoMapa){anchoDelMapa = anchoMaximoMapa-20}
+alturaCalcular = anchoDelMapa * 600/800
+mapa.height = alturaCalcular
+mapa.width = anchoDelMapa
 
 class Personaje{
-    constructor(nombreCompleto,nombre, foto, vida, fotoMapa, ancho = 70, alto = 100){
+    constructor(nombreCompleto,nombre, foto, vida, fotoMapa, ancho = 40, alto = 40, id=null){
+        this.id = id
         this.nombreCompleto = nombreCompleto
         this.nombre = nombre
         this.foto = foto
         this.vida = vida
         this.ataques = []
-        this.x = aleatorio(100,380)
-        this.y = aleatorio(100,260)
         this.ancho = ancho
         this.alto = alto
+        this.x = aleatorio(0,mapa.width - this.ancho)
+        this.y = aleatorio(0,mapa.height - this.alto)
         this.mapaFoto = new Image()
         this.mapaFoto.src = fotoMapa
         this.velocidadX = 0
@@ -83,21 +92,15 @@ class Personaje{
     }
 }
 
-let luffy = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'../assets/luffy-map.png')
-let zoro = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'../assets/zoro-map.png',90,110)
-let sanji = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'../assets/sanji-map.png',100)
-let law = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'../assets/law-map.png',80)
-let ace = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'../assets/ace-map.png')
-
-let luffyEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'../assets/luffy-map.png')
-let zoroEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'../assets/zoro-map.png',90,110)
-let sanjiEnemigo = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'../assets/sanji-map.png',100)
-let lawEnemigo = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'../assets/law-map.png',80)
-let aceEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'../assets/ace-map.png')
+let luffy = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'./assets/luffy-map.png')
+let zoro = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'./assets/zoro-map.png')
+let sanji = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'./assets/sanji-map.png')
+let law = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'./assets/law-map.png')
+let ace = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'./assets/ace-map.png')
 
 
 
-luffy.ataques.push(
+const LUFFY_ATAQUES = [
     {nombre:'👊', id:'boton-golpe'},
     {nombre:'👊', id:'boton-golpe'},
     {nombre:'👊', id:'boton-golpe'},
@@ -106,8 +109,8 @@ luffy.ataques.push(
     {nombre:'🦵', id:'boton-patada'},
     {nombre:'⚔️', id:'boton-corte'},
     {nombre:'💀', id:'boton-especial'}
-)
-zoro.ataques.push(
+]
+const ZORO_ATAQUES = [
     {nombre:'⚔️', id:'boton-corte'},
     {nombre:'⚔️', id:'boton-corte'},
     {nombre:'⚔️', id:'boton-corte'},
@@ -116,8 +119,8 @@ zoro.ataques.push(
     {nombre:'🔥', id:'boton-fuego'},
     {nombre:'🦵', id:'boton-patada'},
     {nombre:'💀', id:'boton-especial'}
-)
-sanji.ataques.push(
+]
+const SANJI_ATAQUES = [
     {nombre:'🦵', id:'boton-patada'},
     {nombre:'🦵', id:'boton-patada'},
     {nombre:'🦵', id:'boton-patada'},
@@ -126,8 +129,8 @@ sanji.ataques.push(
     {nombre:'👊', id:'boton-golpe'},
     {nombre:'⚔️', id:'boton-corte'},
     {nombre:'💀', id:'boton-especial'}
-)
-law.ataques.push(
+]
+const LAW_ATAQUES = [
     {nombre:'💀', id:'boton-especial'},
     {nombre:'💀', id:'boton-especial'},
     {nombre:'💀', id:'boton-especial'},
@@ -136,8 +139,8 @@ law.ataques.push(
     {nombre:'👊', id:'boton-golpe'},
     {nombre:'🦵', id:'boton-patada'},
     {nombre:'🔥', id:'boton-fuego'}
-)
-ace.ataques.push(
+]
+const ACE_ATAQUES = [
     {nombre:'🔥', id:'boton-fuego'},
     {nombre:'🔥', id:'boton-fuego'},
     {nombre:'🔥', id:'boton-fuego'},
@@ -146,7 +149,15 @@ ace.ataques.push(
     {nombre:'⚔️', id:'boton-corte'},
     {nombre:'💀', id:'boton-especial'},
     {nombre:'💀', id:'boton-especial'}
-)
+]
+
+luffy.ataques.push(...LUFFY_ATAQUES)
+zoro.ataques.push(...ZORO_ATAQUES)
+sanji.ataques.push(...SANJI_ATAQUES)
+law.ataques.push(...LAW_ATAQUES)
+ace.ataques.push(...LAW_ATAQUES)
+
+
 
 
 personajes.push(luffy,zoro,sanji,law,ace)
@@ -174,8 +185,22 @@ function iniciarJuego() {
     sectionReiniciar.style.display = 'none'
     botonPersonajeJugador.addEventListener('click', seleccionarPersonajeJugador)
     botonReiniciar.addEventListener('click',reiniciarJuego)
+
+    unirseAlJuego() 
 }
 
+function unirseAlJuego() {
+    fetch('http://localhost:8080/unirse')
+        .then(function (res) {
+            if (res.ok) {
+                res.text()
+                    .then(function (respuesta){
+                        console.log(respuesta)
+                        jugadorId = respuesta
+                    })
+            }
+        })
+}
 
 
 function ataqueAleatorioEnemigo() {
@@ -278,7 +303,7 @@ function crearMensajeFinal(resultadoFinal) {
 }
 
 function seleccionarPersonajeJugador() {
-    // sectionSeleccionarAtaque.style.display = 'flex'
+    
     sectionSeleccionarPersonaje.style.display = 'none'
 
     if (inputLuffy.checked){
@@ -301,10 +326,23 @@ function seleccionarPersonajeJugador() {
         return
     }
 
+    seleccionarPersonaje(personajeJugador)
+
     sectionVerMapa.style.display = 'flex'
     iniciarMapa()
     extraerAtaques(personajeJugador)
-    seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo)
+}
+
+function seleccionarPersonaje(personajeJugador) {
+    fetch(`http://localhost:8080/personaje/${jugadorId}`,{
+        method: 'post',
+        headers:{
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            personaje: personajeJugador
+        })
+    })
 }
 
 function extraerAtaques(personajeJugador) {
@@ -364,14 +402,9 @@ function secuenciaAtaque() {
 }
 
 
-function seleccionarPersonajeEnemigo(spanPersonajeJugador, spanPersonajeEnemigo) {
-    let personajeAleatorio
-    // 1:Luffy, 2:Zoro, 3:Sanji, 4:Law, 5:Ace
-    do {
-        personajeAleatorio = aleatorio(0,personajes.length - 1)
-        spanPersonajeEnemigo.innerHTML = personajes[personajeAleatorio].nombreCompleto
-    } while (spanPersonajeEnemigo.innerHTML == spanPersonajeJugador.innerHTML);
-    ataquesPersonajeEnemigo = personajes[personajeAleatorio].ataques
+function seleccionarPersonajeEnemigo(enemigo) {
+    spanPersonajeEnemigo.innerHTML = enemigo.nombreCompleto
+    ataquesPersonajeEnemigo = enemigo.ataques
     secuenciaAtaque()
 }
 
@@ -398,12 +431,63 @@ function pintarCanvas() {
         mapa.height
     )
     personajeJugadorObjeto.pintarPersonaje()
-    luffyEnemigo.pintarPersonaje()
-    zoroEnemigo.pintarPersonaje()
-    sanjiEnemigo.pintarPersonaje()
-    lawEnemigo.pintarPersonaje()
-    aceEnemigo.pintarPersonaje()
+
+    enviarPosicion(personajeJugadorObjeto.x,personajeJugadorObjeto.y)
+
+    personajesEnemigos.forEach(function(personaje){
+        personaje.pintarPersonaje()
+        revisarColision(personaje)
+    })
     
+    if(personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0){
+        revisarColision(luffyEnemigo)
+        revisarColision(zoroEnemigo)
+        revisarColision(sanjiEnemigo)
+        revisarColision(lawEnemigo)
+        revisarColision(aceEnemigo)
+    }
+}
+
+function enviarPosicion(x,y) {
+    fetch(`http://localhost:8080/personaje/${jugadorId}/posicion`,{
+        method : "post",
+        headers : {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            x,
+            y
+        })
+    })
+        .then(function(res){
+            if(res.ok){
+                res.json()
+                    .then(function ({enemigos}){
+                        console.log(enemigos)
+                        personajesEnemigos = enemigos.map(function (enemigo){
+                            let personajeEnemigo = null
+                            const personajeNombre = enemigo.personaje.nombre || ""
+                            if (personajeNombre === 'Mokey D. Luffy'){
+                                personajeEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'./assets/luffy-map.png')
+                            }else if(personajeNombre === 'Roronoa Zoro'){
+                                personajeEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'./assets/zoro-map.png')
+                            }else if(personajeNombre === 'Vinsmoke Sanji'){
+                                personajeEnemigo = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'./assets/sanji-map.png')
+                            }else if(personajeNombre === 'Trafalgar D. Law'){
+                                personajeEnemigo = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'./assets/law-map.png')
+                            }else if(personajeNombre === 'Portgas D. Ace'){
+                                personajeEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'./assets/ace-map.png')
+                            }else{
+                                alert('ayuda')
+                            }
+                            personajeEnemigo.x = enemigo.x
+                            personajeEnemigo.y = enemigo.y
+
+                            return personajeEnemigo
+                        })
+                    })
+            }
+        })
 }
 
 function moverDerecha() {
@@ -443,8 +527,6 @@ function sePresionoUnaTecla(event) {
 }
 
 function iniciarMapa() {
-    mapa.width = 480
-    mapa.height = 360
     personajeJugadorObjeto = extraerObjetoPersonaje()
     intervalo = setInterval(pintarCanvas,50)    
     window.addEventListener('keydown', sePresionoUnaTecla)
@@ -459,4 +541,30 @@ function extraerObjetoPersonaje() {
     }
 }
 
+
+function revisarColision(enemigo) {
+    const arribaPersonaje = personajeJugadorObjeto.y
+    const abajoPersonaje = personajeJugadorObjeto.y + personajeJugadorObjeto.alto
+    const derechaPersonaje = personajeJugadorObjeto.x + personajeJugadorObjeto.ancho
+    const izquierdaPersonaje = personajeJugadorObjeto.x
+    
+    const arribaEnemigo = enemigo.y
+    const abajoEnemigo = enemigo.y + enemigo.alto
+    const derechaEnemigo = enemigo.x + enemigo.ancho
+    const izquierdaEnemigo = enemigo.x
+    if(
+        abajoPersonaje < arribaEnemigo ||
+        arribaPersonaje > abajoEnemigo ||
+        derechaPersonaje < izquierdaEnemigo ||
+        izquierdaPersonaje > derechaEnemigo 
+    ){
+        return
+    }
+    detenerMovimiento()
+    clearInterval(intervalo)
+    sectionSeleccionarAtaque.style.display = 'flex'
+    sectionVerMapa.style.display = 'none'
+    seleccionarPersonajeEnemigo(enemigo)
+    alert('Hay colisión con ' + enemigo.nombreCompleto)
+}
 window.addEventListener('load',iniciarJuego)
