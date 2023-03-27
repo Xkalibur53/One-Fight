@@ -3,6 +3,7 @@ const cors = require('cors')
 
 const app = express()
 
+app.use(express.static('public'))
 app.use(cors())
 app.use(express.json())
 
@@ -18,6 +19,10 @@ class Jugador {
     actualizarPosicion(x, y){
         this.x = x
         this.y = y
+    }
+
+    asignarAtaques(ataques){
+        this.ataques = ataques
     }
 }
 
@@ -65,11 +70,31 @@ app.post("/personaje/:jugadorId/posicion", (req, res)=>{
         jugadores[jugadorIndex].actualizarPosicion(x,y)
     }
 
-    const enemigos = jugadores.filter((jugador) => jugadorId !== jugador.id )
+    const enemigos = jugadores.filter((jugador) => jugadorId !== jugador.id ) || []
 
 
     res.send({
         enemigos
+    })
+})
+
+app.post('/personaje/:jugadorId/ataques', (req,res)=>{
+    const jugadorId = req.params.jugadorId || ""
+    const ataques = req.body.ataques || []
+
+    const jugadorIndex = jugadores.findIndex((jugador) => jugadorId === jugador.id) || []
+    if (jugadorIndex >= 0) {
+        jugadores[jugadorIndex].asignarAtaques(ataques)
+        
+    }
+    res.end()
+})
+
+app.get('/personaje/:jugadorId/ataques', (req,res)=>{
+    const jugadorId = req.params.jugadorId || ""
+    const jugador = jugadores.find((jugador)=> jugador.id === jugadorId) || []
+    res.send({
+        ataques:jugador.ataques || []
     })
 })
 

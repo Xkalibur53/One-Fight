@@ -24,6 +24,7 @@ const mapa = document.getElementById('mapa')
 
 
 let jugadorId = null
+let enemigoId = null
 let personajesEnemigos = []
 let ataqueJugador = []
 let ataqueEnemigo = []
@@ -232,6 +233,7 @@ function indexAmbosOponentes(jugador,enemigo) {
 }
 
 function combate() {
+    clearInterval(intervalo)
     for (let index = 0; index < ataqueJugador.length; index++) {
         if(ataqueJugador[index] === ataqueEnemigo[index]){
             indexAmbosOponentes(index, index)
@@ -303,8 +305,6 @@ function crearMensajeFinal(resultadoFinal) {
 }
 
 function seleccionarPersonajeJugador() {
-    
-    sectionSeleccionarPersonaje.style.display = 'none'
 
     if (inputLuffy.checked){
         spanPersonajeJugador.innerHTML = luffy.nombreCompleto
@@ -325,7 +325,8 @@ function seleccionarPersonajeJugador() {
         alert('Selecciona un personaje')
         return
     }
-
+    
+    sectionSeleccionarPersonaje.style.display = 'none'
     seleccionarPersonaje(personajeJugador)
 
     sectionVerMapa.style.display = 'flex'
@@ -395,10 +396,41 @@ function secuenciaAtaque() {
                 boton.style.background = '#3f969b60'
                 boton.disabled = true
             }
-            ataqueAleatorioEnemigo()
+            if (ataqueJugador.length === 8) {
+                enviarAtaques()
+            }
         })
     })
     
+}
+
+function enviarAtaques() {
+    fetch(`http:localhost:8080/personaje/${jugadorId}`,{
+        method:"post",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            ataques: ataqueJugador
+        })
+    })
+
+    intervalo = setInterval(obtenerAtaques, 50)
+}
+
+function obtenerAtaques() {
+    fetch(`http:localhost:8080/personaje/${enemigoId}/ataques`)
+        .then(function(res){
+            if(res.ok){
+                res.json()
+                    .then(function ({ataques}){
+                        if (ataques.length === 8){
+                            ataqueEnemigo = ataques
+                            combate()
+                        }
+                    })
+            }
+        })
 }
 
 
@@ -435,17 +467,12 @@ function pintarCanvas() {
     enviarPosicion(personajeJugadorObjeto.x,personajeJugadorObjeto.y)
 
     personajesEnemigos.forEach(function(personaje){
-        personaje.pintarPersonaje()
-        revisarColision(personaje)
+        if (personaje != undefined) {
+            personaje.pintarPersonaje()
+            revisarColision(personaje)
+        }
     })
     
-    if(personajeJugadorObjeto.velocidadX !== 0 || personajeJugadorObjeto.velocidadY !== 0){
-        revisarColision(luffyEnemigo)
-        revisarColision(zoroEnemigo)
-        revisarColision(sanjiEnemigo)
-        revisarColision(lawEnemigo)
-        revisarColision(aceEnemigo)
-    }
 }
 
 function enviarPosicion(x,y) {
@@ -468,17 +495,16 @@ function enviarPosicion(x,y) {
                             let personajeEnemigo = null
                             const personajeNombre = enemigo.personaje.nombre || ""
                             if (personajeNombre === 'Monkey D. Luffy'){
-                                personajeEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'./assets/luffy-map.png')
+                                personajeEnemigo = new Personaje('Monkey D. Luffy','luffy','./assets/luffy-removebg-preview.png',5,'./assets/luffy-map.png',enemigo.id)
                             }else if(personajeNombre === 'Roronoa Zoro'){
-                                personajeEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'./assets/zoro-map.png')
+                                personajeEnemigo = new Personaje('Roronoa Zoro','zoro','./assets/zoro-removebg-preview.png',5,'./assets/zoro-map.png',enemigo.id)
                             }else if(personajeNombre === 'Vinsmoke Sanji'){
-                                personajeEnemigo = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'./assets/sanji-map.png')
+                                personajeEnemigo = new Personaje('Vinsmoke Sanji','sanji','./assets/sanji-removebg-preview.png',5,'./assets/sanji-map.png',enemigo.id)
                             }else if(personajeNombre === 'Trafalgar D. Law'){
-                                personajeEnemigo = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'./assets/law-map.png')
+                                personajeEnemigo = new Personaje('Trafalgar D. Law','law','./assets/law-removebg-preview.png',5,'./assets/law-map.png',enemigo.id)
                             }else if(personajeNombre === 'Portgas D. Ace'){
-                                personajeEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'./assets/ace-map.png')
+                                personajeEnemigo = new Personaje('Portgas D. Ace','ace','./assets/ace-removebg-preview.png',5,'./assets/ace-map.png',enemigo.id)
                             }else{
-                                alert('ayuda')
                                 return
                             }
                             personajeEnemigo.x = enemigo.x
@@ -563,9 +589,11 @@ function revisarColision(enemigo) {
     }
     detenerMovimiento()
     clearInterval(intervalo)
+    alert('Hay colisión con ' + enemigo.nombreCompleto)
+
+    enemigoId = enemigo.id
     sectionSeleccionarAtaque.style.display = 'flex'
     sectionVerMapa.style.display = 'none'
     seleccionarPersonajeEnemigo(enemigo)
-    alert('Hay colisión con ' + enemigo.nombreCompleto)
 }
 window.addEventListener('load',iniciarJuego)
